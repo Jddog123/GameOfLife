@@ -82,6 +82,14 @@ public class JuegoDeLaVidaTest
 
     }
 
+    [Fact]
+    public void DadaUnaCelulaEnLaEsquinaSuperiorIzquierdaDelTablero_Debe_EstarMuertoElVecinoSuperior()
+    {
+        _juego.AsignarCelula(0,0);
+        
+        _juego.ContarVecinosVivos(0,0).Should().Be(0);
+    }
+
 }
 
 public class JuegoDeLaVida
@@ -111,6 +119,12 @@ public class JuegoDeLaVida
         
         int contador = 0;
         
+        if (TieneVecinoSuperiorVivo(fila, columna))
+            contador++;
+        
+        if (TieneVecinoSuperiorDerechoVivo(fila, columna))
+            contador++;
+
         if (TieneVecinoSuperiorIzquierdoVivo(fila, columna))
              contador++;
         
@@ -129,11 +143,7 @@ public class JuegoDeLaVida
         if (TieneVecinoDerechoVivo(fila, columna))
             contador++;
         
-        if (TieneVecinoSuperiorDerechoVivo(fila, columna))
-            contador++;
         
-        if (TieneVecinoSuperiorVivo(fila, columna))
-            contador++;
           
         
        
@@ -142,16 +152,22 @@ public class JuegoDeLaVida
 
     private bool TieneVecinoSuperiorIzquierdoVivo(int fila, int columna)
     {
+        if(fila -1 < 0 || columna -1 < 0)
+            return false;
         return _tablero[fila - 1, columna - 1] == 1;
     }
 
     private bool TieneVecinoIzquierdoVivo(int fila, int columna)
     {
+        if (columna -1 < 0)
+            return false;
         return _tablero[fila, columna - 1] == 1;
     }
 
     private bool TieneVecinoInferiorIzquierdoVivo(int fila, int columna)
     {
+        if (columna + 1 > _tablero.GetLength(0) || columna -1 < 0)
+            return false;
         return _tablero[fila + 1, columna - 1] == 1;
     }
 
@@ -172,11 +188,15 @@ public class JuegoDeLaVida
 
     private bool TieneVecinoSuperiorDerechoVivo(int fila, int columna)
     {
+        if (fila - 1 < 0 || columna + 1 > _tablero.GetLength(1))
+            return false;
         return _tablero[fila - 1, columna + 1] == 1;
     }
 
     private bool TieneVecinoSuperiorVivo(int fila, int columna)
     {
+        if (fila -1 < 0 )
+            return false;
         return _tablero[fila - 1, columna] == 1;
     }
 }
