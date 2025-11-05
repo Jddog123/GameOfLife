@@ -1,0 +1,4 @@
+﻿- [ ] Dado una celula viva la siguiente generacion debe morir
+- [ ] Dado dos celulas vivas la siguiente generacion debe morir
+- [ ] Dado tres celulas juntas la siguiente generacion debe tener una poblacion de cuatro
+- [ ] Si una celula tiene dos o tres vecinas pasa a la siguiente generacion
