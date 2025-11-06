@@ -83,13 +83,20 @@ public class JuegoDeLaVidaTest
     }
 
     [Fact]
-    public void DadaUnaCelulaEnLaEsquinaSuperiorIzquierdaDelTablero_Debe_EstarMuertoElVecinoSuperior()
+    public void DadaUnaCelulaEnLaEsquinaSuperiorIzquierdaDelTablero_Debe_EstarMuertoLosVecinosFueraDelBorde()
     {
         _juego.AsignarCelula(0,0);
         
         _juego.ContarVecinosVivos(0,0).Should().Be(0);
     }
 
+    [Fact]
+    public void DadaUnaCelularEnLaEsquinaInferiorDerechaDelTablero_Debe_EstarMuertoLosVecinosFueraDelBorde()
+    {
+        _juego.AsignarCelula(5,5);
+        
+        _juego.ContarVecinosVivos(5,5).Should().Be(0);
+    }
 }
 
 public class JuegoDeLaVida
@@ -143,10 +150,6 @@ public class JuegoDeLaVida
         if (TieneVecinoDerechoVivo(fila, columna))
             contador++;
         
-        
-          
-        
-       
         return contador;
     }
 
@@ -166,30 +169,40 @@ public class JuegoDeLaVida
 
     private bool TieneVecinoInferiorIzquierdoVivo(int fila, int columna)
     {
-        if (columna + 1 > _tablero.GetLength(0) || columna -1 < 0)
+        if (fila + 1 > _tablero.GetLength(0)-1 || columna -1 < 0)
             return false;
         return _tablero[fila + 1, columna - 1] == 1;
     }
 
     private bool TieneVecinoInferiorVivo(int fila, int columna)
     {
+        if (fila + 1 > _tablero.GetLength(0) - 1)
+            return false;
+            
         return _tablero[fila + 1, columna] == 1;
     }
 
     private bool TieneVecinoInferiorDerechoVivo(int fila, int columna)
     {
+        if (fila + 1 > _tablero.GetLength(0) - 1 || columna + 1 > _tablero.GetLength(1) - 1)
+            return false;
+        
         return _tablero[fila + 1, columna + 1] == 1;
     }
 
     private bool TieneVecinoDerechoVivo(int fila, int columna)
     {
+        if(columna + 1 > _tablero.GetLength(1) - 1)
+            return false;
+            
         return _tablero[fila, columna + 1] == 1;
     }
 
     private bool TieneVecinoSuperiorDerechoVivo(int fila, int columna)
     {
-        if (fila - 1 < 0 || columna + 1 > _tablero.GetLength(1))
+        if (fila - 1 < 0 || columna + 1 > _tablero.GetLength(1) - 1)
             return false;
+        
         return _tablero[fila - 1, columna + 1] == 1;
     }
 
