@@ -75,10 +75,14 @@ public class JuegoDeLaVida
     public bool[,] SiguienteGeneracion()
     {
         bool[,] nuevaGeneracion = (bool[,] )_tablero.Clone();
-        int fila = 1;
-        int columna = 1;
 
-        nuevaGeneracion[fila,columna] = CalcularNuevaGeneracionCelula(fila, columna);
+        for (int fila = 0; fila < _ultimaFila; fila++)
+        {
+            for (int columna = 0; columna < _ultimaColumna; columna++)
+            {
+                nuevaGeneracion[fila,columna] = CalcularNuevaGeneracionCelula(fila, columna);
+            }
+        }
         _tablero = (bool[,] )nuevaGeneracion.Clone();
         
         return nuevaGeneracion;
@@ -87,8 +91,9 @@ public class JuegoDeLaVida
     private bool CalcularNuevaGeneracionCelula(int fila, int columna)
     {
         int cantidadVecinosVivos = ContarVecinosVivos(fila,columna);
-
-        if (_tablero[fila, columna])
+        bool celulaEstaviva = _tablero[fila, columna];
+        
+        if (celulaEstaviva)
         {
             if(cantidadVecinosVivos is 0 or 1 or >= 4)
                 return false;
@@ -99,6 +104,6 @@ public class JuegoDeLaVida
                 return true;
         }
 
-        return _tablero[fila, columna];
+        return celulaEstaviva;
     }
 }

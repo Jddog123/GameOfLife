@@ -381,17 +381,17 @@ public class JuegoDeLaVidaTest
         juego.CelulaEstaViva(1, 1).Should().BeFalse();
     }
 
-    // [Fact]
-    // public void DadaDosCelulasVecinas_Debe_MorirAmbasPorInfrapoblacion()
-    // {
-    //     var  juego = new JuegoDeLaVida(2);
-    //     
-    //     juego.AsignarCelula(0,0);
-    //     juego.AsignarCelula(1,1);
-    //     bool[,] generacionEsperada = new bool[2, 2];
-    //
-    //     bool[,] nuevaGeneracion = juego.SiguienteGeneracion();
-    //     
-    //     nuevaGeneracion.Should().BeEquivalentTo(generacionEsperada);
-    // }
+    [Fact]
+    public void DadaDosCelulasVecinas_Debe_MorirAmbasPorInfrapoblacion()
+    {
+        var  juego = new JuegoDeLaVida(2);
+        
+        juego.AsignarCelula(0,0);
+        juego.AsignarCelula(1,1);
+        bool[,] generacionEsperada = new bool[2, 2];
+    
+        bool[,] nuevaGeneracion = juego.SiguienteGeneracion();
+        
+        nuevaGeneracion.Should().BeEquivalentTo(generacionEsperada);
+    }
 }
