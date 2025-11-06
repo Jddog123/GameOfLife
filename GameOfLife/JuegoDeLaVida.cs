@@ -77,10 +77,8 @@ public class JuegoDeLaVida
         bool[,] nuevaGeneracion = new bool[_dimension,_dimension];
         int cantidadVecinosVivos = ContarVecinosVivos(0,0);
         
-        if (cantidadVecinosVivos == 2)
-        {
+        if (cantidadVecinosVivos is 3 or 2) 
             nuevaGeneracion[0, 0] = true;
-        }
             
         return nuevaGeneracion;
         

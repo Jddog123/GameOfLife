@@ -95,31 +95,30 @@ public class JuegoDeLaVidaTest
 
         _juego.ContarVecinosVivos(5, 5).Should().Be(0);
     }
-    
-    
+
 
     [Theory]
     [InlineData(1)]
     [InlineData(3)]
     [InlineData(5)]
     [InlineData(10)]
-    public void DadoLaDimensionDeUnTableroConUnaCelulaVivaEnLaSiguienteGeneracion_Debe_EstarMuerta (int dimension)
+    public void DadoLaDimensionDeUnTableroConUnaCelulaVivaEnLaSiguienteGeneracion_Debe_EstarMuerta(int dimension)
     {
         var juego = new JuegoDeLaVida(dimension);
-        juego.AsignarCelula(0,0);
-        bool[,] tableroEsperado = new bool[dimension,dimension];
-        
+        juego.AsignarCelula(0, 0);
+        bool[,] tableroEsperado = new bool[dimension, dimension];
+
         juego.SiguienteGeneracion().Should().BeEquivalentTo(tableroEsperado);
     }
-    
+
     [Fact]
     public void DadaDosCelulasVivasEnElTableroLaSiguienteGeneracion_Debe_EstarMuerta()
     {
         var juego = new JuegoDeLaVida(2);
-        juego.AsignarCelula(0,0);
-        juego.AsignarCelula(0,1);
-        var tableroEsperado = new bool[2,2];
-        
+        juego.AsignarCelula(0, 0);
+        juego.AsignarCelula(0, 1);
+        var tableroEsperado = new bool[2, 2];
+
         juego.SiguienteGeneracion().Should().BeEquivalentTo(tableroEsperado);
     }
 
@@ -127,26 +126,25 @@ public class JuegoDeLaVidaTest
     public void DadaUnaCelulaConDosVecinosLaSiguienteGeneracion_Debe_Sobrevivir()
     {
         var juego = new JuegoDeLaVida(2);
-        juego.AsignarCelula(0,0);
-        juego.AsignarCelula(0,1);
-        juego.AsignarCelula(1,0);
-        
+        juego.AsignarCelula(0, 0);
+        juego.AsignarCelula(0, 1);
+        juego.AsignarCelula(1, 0);
+
         var nuevaGeneracion = juego.SiguienteGeneracion();
         nuevaGeneracion[0, 0].Should().BeTrue();
     }
 
     [Fact]
     public void DadaUnaCelulaConTresVecinosLaSiguienteGeneracion_Debe_Sobrevivir()
-    {var juego = new JuegoDeLaVida(2);
-    
-    juego.AsignarCelula(0,0);
-    juego.AsignarCelula(0,1);
-    juego.AsignarCelula(1,0);
-    juego.AsignarCelula(1,1);
-    
-    var nuevaGeneracion = juego.SiguienteGeneracion();
-    nuevaGeneracion[0, 0].Should().BeTrue();
-    
+    {
+        var juego = new JuegoDeLaVida(2);
+
+        juego.AsignarCelula(0, 0);
+        juego.AsignarCelula(0, 1);
+        juego.AsignarCelula(1, 0);
+        juego.AsignarCelula(1, 1);
+
+        var nuevaGeneracion = juego.SiguienteGeneracion();
+        nuevaGeneracion[0, 0].Should().BeTrue();
     }
-    
 }
