@@ -75,14 +75,11 @@ public class JuegoDeLaVida
     public bool[,] SiguienteGeneracion()
     {
         bool[,] nuevaGeneracion = (bool[,] )_tablero.Clone();
+        int fila = 1;
+        int columna = 1;
 
-        for (int fila = 0; fila < _ultimaFila; fila++)
-        {
-            for (int columna = 0; columna < _ultimaColumna; columna++)
-            {
-                nuevaGeneracion[fila,columna] = CalcularNuevaGeneracionCelula(fila, columna);
-            }
-        }
+        nuevaGeneracion[fila,columna] = CalcularNuevaGeneracionCelula(fila, columna);
+        nuevaGeneracion[0,0] = CalcularNuevaGeneracionCelula(0, 0);
         _tablero = (bool[,] )nuevaGeneracion.Clone();
         
         return nuevaGeneracion;
