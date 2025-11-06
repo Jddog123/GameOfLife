@@ -146,30 +146,47 @@ public class JuegoDeLaVida
         return contador;
     }
 
+    public bool EstoyPorFuera(int fila, int columna)
+    {
+        int casillaDerecha = columna + 1;
+        int casillaInferior = fila + 1;
+        int casillaIzquierda = columna - 1;
+        int casillaSuperior = fila - 1;
+
+        return casillaDerecha > _ultimaColumna ||
+               casillaInferior > _ultimaFila || 
+               casillaIzquierda < 0 || 
+               casillaSuperior < 0;
+    }
+    
     private bool TieneVecinoSuperiorIzquierdoVivo(int fila, int columna)
     {
-        if (fila - 1 < 0 || columna - 1 < 0)
+        if (EstoyPorFuera(fila, columna))
             return false;
+
         return _tablero[fila - 1, columna - 1] == 1;
     }
 
     private bool TieneVecinoIzquierdoVivo(int fila, int columna)
     {
-        if (columna - 1 < 0)
+        if (EstoyPorFuera(fila, columna))
             return false;
+
         return _tablero[fila, columna - 1] == 1;
     }
 
     private bool TieneVecinoInferiorIzquierdoVivo(int fila, int columna)
     {
-        if (fila + 1 > _ultimaFila || columna - 1 < 0)
+        if (EstoyPorFuera(fila, columna))
             return false;
+
         return _tablero[fila + 1, columna - 1] == 1;
     }
 
+
     private bool TieneVecinoInferiorVivo(int fila, int columna)
     {
-        if (fila + 1 > _ultimaFila)
+        if (EstoyPorFuera(fila, columna))
             return false;
 
         return _tablero[fila + 1, columna] == 1;
@@ -177,32 +194,36 @@ public class JuegoDeLaVida
 
     private bool TieneVecinoInferiorDerechoVivo(int fila, int columna)
     {
-        if (fila + 1 > _ultimaFila || columna + 1 > _ultimaColumna)
+        if (EstoyPorFuera(fila, columna))
             return false;
 
         return _tablero[fila + 1, columna + 1] == 1;
     }
 
+
     private bool TieneVecinoDerechoVivo(int fila, int columna)
     {
-        if (columna + 1 > _ultimaColumna)
+        if (EstoyPorFuera(fila, columna))
             return false;
 
         return _tablero[fila, columna + 1] == 1;
     }
 
+
     private bool TieneVecinoSuperiorDerechoVivo(int fila, int columna)
     {
-        if (fila - 1 < 0 || columna + 1 > _ultimaColumna)
+        if (EstoyPorFuera(fila, columna))
             return false;
 
         return _tablero[fila - 1, columna + 1] == 1;
     }
 
+
     private bool TieneVecinoSuperiorVivo(int fila, int columna)
     {
-        if (fila - 1 < 0)
+        if (EstoyPorFuera(fila, columna))
             return false;
+
         return _tablero[fila - 1, columna] == 1;
     }
 }
