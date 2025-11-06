@@ -95,75 +95,58 @@ public class JuegoDeLaVidaTest
 
         _juego.ContarVecinosVivos(5, 5).Should().Be(0);
     }
-}
+    
+    
 
-public class JuegoDeLaVida
-{
-    private readonly int[,] _tablero;
-    private readonly int _ultimaFila;
-    private readonly int _ultimaColumna;
-
-    public JuegoDeLaVida(int dimension)
+    [Theory]
+    [InlineData(1)]
+    [InlineData(3)]
+    [InlineData(5)]
+    [InlineData(10)]
+    public void DadoLaDimensionDeUnTableroConUnaCelulaVivaEnLaSiguienteGeneracion_Debe_EstarMuerta (int dimension)
     {
-        _tablero = new int[dimension, dimension];
-        _ultimaFila = _tablero.GetLength(0) - 1;
-        _ultimaColumna = _tablero.GetLength(1) - 1;
+        var juego = new JuegoDeLaVida(dimension);
+        juego.AsignarCelula(0,0);
+        bool[,] tableroEsperado = new bool[dimension,dimension];
+        
+        juego.SiguienteGeneracion().Should().BeEquivalentTo(tableroEsperado);
+    }
+    
+    [Fact]
+    public void DadaDosCelulasVivasEnElTableroLaSiguienteGeneracion_Debe_EstarMuerta()
+    {
+        var juego = new JuegoDeLaVida(2);
+        juego.AsignarCelula(0,0);
+        juego.AsignarCelula(0,1);
+        var tableroEsperado = new bool[2,2];
+        
+        juego.SiguienteGeneracion().Should().BeEquivalentTo(tableroEsperado);
     }
 
-    public void AsignarCelula(int fila, int columna)
+    [Fact]
+    public void DadaUnaCelulaConDosVecinosLaSiguienteGeneracion_Debe_Sobrevivir()
     {
-        _tablero[fila, columna] = 1;
+        var juego = new JuegoDeLaVida(2);
+        juego.AsignarCelula(0,0);
+        juego.AsignarCelula(0,1);
+        juego.AsignarCelula(1,0);
+        
+        var nuevaGeneracion = juego.SiguienteGeneracion();
+        nuevaGeneracion[0, 0].Should().BeTrue();
     }
 
-    public int ContarVecinosVivos(int fila, int columna)
-    {
-        int contador = 0;
-
-        int vecinoSuperior = fila - 1;
-        int vecinoInferior = fila + 1;
-        int vecinoDerecho = columna + 1;
-        int vecinoIzquierdo = columna - 1;
-        
-        if (TieneVecinoVivo(vecinoSuperior, columna))
-            contador++;
-        
-        if (TieneVecinoVivo(vecinoSuperior, vecinoDerecho))
-            contador++;
-        
-        if (TieneVecinoVivo(vecinoSuperior, vecinoIzquierdo))
-            contador++;
-
-        if (TieneVecinoVivo(fila, vecinoIzquierdo))
-            contador++;
-        
-        if (TieneVecinoVivo(vecinoInferior, vecinoIzquierdo))
-            contador++;
-
-        if (TieneVecinoVivo(vecinoInferior, columna))
-            contador++;
-
-        if (TieneVecinoVivo(vecinoInferior, vecinoDerecho))
-            contador++;
-
-        if (TieneVecinoVivo(fila, vecinoDerecho))
-            contador++;
-
-        return contador;
+    [Fact]
+    public void DadaUnaCelulaConTresVecinosLaSiguienteGeneracion_Debe_Sobrevivir()
+    {var juego = new JuegoDeLaVida(2);
+    
+    juego.AsignarCelula(0,0);
+    juego.AsignarCelula(0,1);
+    juego.AsignarCelula(1,0);
+    juego.AsignarCelula(1,1);
+    
+    var nuevaGeneracion = juego.SiguienteGeneracion();
+    nuevaGeneracion[0, 0].Should().BeTrue();
+    
     }
-
-    private bool TieneVecinoVivo(int filaVecino, int columnaVecino)
-    {
-        if (VecinoEstaPorFuera(filaVecino, columnaVecino))
-            return false;
-        
-        return _tablero[filaVecino, columnaVecino] == 1;
-    }
-
-    private bool VecinoEstaPorFuera(int fila, int columna)
-    {
-        return columna > _ultimaColumna ||
-               fila > _ultimaFila || 
-               columna < 0 || 
-               fila < 0;
-    }
+    
 }
