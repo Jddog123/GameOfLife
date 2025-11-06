@@ -38,7 +38,7 @@ public class JuegoDeLaVidaTest
     }
 
     [Fact]
-    public void DadaUnaCeLulaConUnVecinoAlAIzquierdaYotroAlaDerecha_Debe_RetornarDos()
+    public void DadaUnaCeLulaConUnVecinoAlAIzquierdaYOtroAlaDerecha_Debe_RetornarDos()
     {
         _juego.AsignarCelula(2, 1);
         _juego.AsignarCelula(2, 2);
@@ -119,111 +119,51 @@ public class JuegoDeLaVida
     {
         int contador = 0;
 
-        if (TieneVecinoSuperiorVivo(fila, columna))
+        int vecinoSuperior = fila - 1;
+        int vecinoInferior = fila + 1;
+        int vecinoDerecho = columna + 1;
+        int vecinoIzquierdo = columna - 1;
+        
+        if (TieneVecinoVivo(vecinoSuperior, columna))
+            contador++;
+        
+        if (TieneVecinoVivo(vecinoSuperior, vecinoDerecho))
+            contador++;
+        
+        if (TieneVecinoVivo(vecinoSuperior, vecinoIzquierdo))
             contador++;
 
-        if (TieneVecinoSuperiorDerechoVivo(fila, columna))
+        if (TieneVecinoVivo(fila, vecinoIzquierdo))
+            contador++;
+        
+        if (TieneVecinoVivo(vecinoInferior, vecinoIzquierdo))
             contador++;
 
-        if (TieneVecinoSuperiorIzquierdoVivo(fila, columna))
+        if (TieneVecinoVivo(vecinoInferior, columna))
             contador++;
 
-        if (TieneVecinoIzquierdoVivo(fila, columna))
+        if (TieneVecinoVivo(vecinoInferior, vecinoDerecho))
             contador++;
 
-        if (TieneVecinoInferiorIzquierdoVivo(fila, columna))
-            contador++;
-
-        if (TieneVecinoInferiorVivo(fila, columna))
-            contador++;
-
-        if (TieneVecinoInferiorDerechoVivo(fila, columna))
-            contador++;
-
-        if (TieneVecinoDerechoVivo(fila, columna))
+        if (TieneVecinoVivo(fila, vecinoDerecho))
             contador++;
 
         return contador;
     }
 
-    public bool EstoyPorFuera(int fila, int columna)
+    private bool TieneVecinoVivo(int filaVecino, int columnaVecino)
     {
-        int casillaDerecha = columna + 1;
-        int casillaInferior = fila + 1;
-        int casillaIzquierda = columna - 1;
-        int casillaSuperior = fila - 1;
-
-        return casillaDerecha > _ultimaColumna ||
-               casillaInferior > _ultimaFila || 
-               casillaIzquierda < 0 || 
-               casillaSuperior < 0;
-    }
-    
-    private bool TieneVecinoSuperiorIzquierdoVivo(int fila, int columna)
-    {
-        if (EstoyPorFuera(fila, columna))
+        if (VecinoEstaPorFuera(filaVecino, columnaVecino))
             return false;
-
-        return _tablero[fila - 1, columna - 1] == 1;
+        
+        return _tablero[filaVecino, columnaVecino] == 1;
     }
 
-    private bool TieneVecinoIzquierdoVivo(int fila, int columna)
+    private bool VecinoEstaPorFuera(int fila, int columna)
     {
-        if (EstoyPorFuera(fila, columna))
-            return false;
-
-        return _tablero[fila, columna - 1] == 1;
-    }
-
-    private bool TieneVecinoInferiorIzquierdoVivo(int fila, int columna)
-    {
-        if (EstoyPorFuera(fila, columna))
-            return false;
-
-        return _tablero[fila + 1, columna - 1] == 1;
-    }
-
-
-    private bool TieneVecinoInferiorVivo(int fila, int columna)
-    {
-        if (EstoyPorFuera(fila, columna))
-            return false;
-
-        return _tablero[fila + 1, columna] == 1;
-    }
-
-    private bool TieneVecinoInferiorDerechoVivo(int fila, int columna)
-    {
-        if (EstoyPorFuera(fila, columna))
-            return false;
-
-        return _tablero[fila + 1, columna + 1] == 1;
-    }
-
-
-    private bool TieneVecinoDerechoVivo(int fila, int columna)
-    {
-        if (EstoyPorFuera(fila, columna))
-            return false;
-
-        return _tablero[fila, columna + 1] == 1;
-    }
-
-
-    private bool TieneVecinoSuperiorDerechoVivo(int fila, int columna)
-    {
-        if (EstoyPorFuera(fila, columna))
-            return false;
-
-        return _tablero[fila - 1, columna + 1] == 1;
-    }
-
-
-    private bool TieneVecinoSuperiorVivo(int fila, int columna)
-    {
-        if (EstoyPorFuera(fila, columna))
-            return false;
-
-        return _tablero[fila - 1, columna] == 1;
+        return columna > _ultimaColumna ||
+               fila > _ultimaFila || 
+               columna < 0 || 
+               fila < 0;
     }
 }
