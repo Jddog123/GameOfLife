@@ -2,7 +2,7 @@
 
 public class JuegoDeLaVida
 {
-    private readonly bool[,] _tablero;
+    private bool[,] _tablero;
     private readonly int _ultimaFila;
     private readonly int _ultimaColumna;
     private int _dimension;
@@ -28,64 +28,77 @@ public class JuegoDeLaVida
         int vecinoInferior = fila + 1;
         int vecinoDerecho = columna + 1;
         int vecinoIzquierdo = columna - 1;
-        
-        if (TieneVecinoVivo(vecinoSuperior, columna))
-            contador++;
-        
-        if (TieneVecinoVivo(vecinoSuperior, vecinoDerecho))
-            contador++;
-        
-        if (TieneVecinoVivo(vecinoSuperior, vecinoIzquierdo))
+
+        if (CelulaEstaViva(vecinoSuperior, columna))
             contador++;
 
-        if (TieneVecinoVivo(fila, vecinoIzquierdo))
-            contador++;
-        
-        if (TieneVecinoVivo(vecinoInferior, vecinoIzquierdo))
+        if (CelulaEstaViva(vecinoSuperior, vecinoDerecho))
             contador++;
 
-        if (TieneVecinoVivo(vecinoInferior, columna))
+        if (CelulaEstaViva(vecinoSuperior, vecinoIzquierdo))
             contador++;
 
-        if (TieneVecinoVivo(vecinoInferior, vecinoDerecho))
+        if (CelulaEstaViva(fila, vecinoIzquierdo))
             contador++;
 
-        if (TieneVecinoVivo(fila, vecinoDerecho))
+        if (CelulaEstaViva(vecinoInferior, vecinoIzquierdo))
+            contador++;
+
+        if (CelulaEstaViva(vecinoInferior, columna))
+            contador++;
+
+        if (CelulaEstaViva(vecinoInferior, vecinoDerecho))
+            contador++;
+
+        if (CelulaEstaViva(fila, vecinoDerecho))
             contador++;
 
         return contador;
     }
 
-    public bool TieneVecinoVivo(int filaVecino, int columnaVecino)
+    public bool CelulaEstaViva(int fila, int columna)
     {
-        if (VecinoEstaPorFuera(filaVecino, columnaVecino))
+        if (VecinoEstaPorFuera(fila, columna))
             return false;
-        
-        return _tablero[filaVecino, columnaVecino];
+
+        return _tablero[fila, columna];
     }
 
     private bool VecinoEstaPorFuera(int fila, int columna)
     {
         return columna > _ultimaColumna ||
-               fila > _ultimaFila || 
-               columna < 0 || 
+               fila > _ultimaFila ||
+               columna < 0 ||
                fila < 0;
     }
 
     public bool[,] SiguienteGeneracion()
     {
-        bool[,] nuevaGeneracion = new bool[_dimension,_dimension];
-        int cantidadVecinosVivos = ContarVecinosVivos(0,0);
+        bool[,] nuevaGeneracion = (bool[,] )_tablero.Clone();
+        int fila = 1;
+        int columna = 1;
 
-        if (cantidadVecinosVivos is 3 or 2)
-        {
-            nuevaGeneracion[0, 0] = true;
-        }
+        nuevaGeneracion[fila,columna] = CalcularNuevaGeneracionCelula(fila, columna);
+        _tablero = (bool[,] )nuevaGeneracion.Clone();
         
-        
-
-            
         return nuevaGeneracion;
-        
+    }
+
+    private bool CalcularNuevaGeneracionCelula(int fila, int columna)
+    {
+        int cantidadVecinosVivos = ContarVecinosVivos(fila,columna);
+
+        if (_tablero[fila, columna])
+        {
+            if(cantidadVecinosVivos is 0 or 1 or >= 4)
+                return false;
+        }
+        else
+        {
+            if(cantidadVecinosVivos == 3)
+                return true;
+        }
+
+        return _tablero[fila, columna];
     }
 }

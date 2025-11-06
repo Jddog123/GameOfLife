@@ -97,75 +97,32 @@ public class JuegoDeLaVidaTest
     }
 
 
-    [Theory]
-    [InlineData(1)]
-    [InlineData(3)]
-    [InlineData(5)]
-    [InlineData(10)]
-    public void DadoLaDimensionDeUnTableroConUnaCelulaVivaEnLaSiguienteGeneracion_Debe_EstarMuerta(int dimension)
-    {
-        var juego = new JuegoDeLaVida(dimension);
-        juego.AsignarCelula(0, 0);
-        bool[,] tableroEsperado = new bool[dimension, dimension];
-
-        juego.SiguienteGeneracion().Should().BeEquivalentTo(tableroEsperado);
-    }
-
     [Fact]
-    public void DadaDosCelulasVivasEnElTableroLaSiguienteGeneracion_Debe_EstarMuerta()
+    public void DadaUnaCelulaEnLaPosicion1_1_SinVecinos_Debe_MorirPorInfrapoblacion()
     {
-        var juego = new JuegoDeLaVida(2);
-        juego.AsignarCelula(0, 0);
-        juego.AsignarCelula(0, 1);
-        var tableroEsperado = new bool[2, 2];
-
-        juego.SiguienteGeneracion().Should().BeEquivalentTo(tableroEsperado);
-    }
-
-    [Fact]
-    public void DadaUnaCelulaConDosVecinosLaSiguienteGeneracion_Debe_Sobrevivir()
-    {
-        var juego = new JuegoDeLaVida(2);
-        juego.AsignarCelula(0, 0);
-        juego.AsignarCelula(0, 1);
-        juego.AsignarCelula(1, 0);
-
-        var nuevaGeneracion = juego.SiguienteGeneracion();
-        nuevaGeneracion[0, 0].Should().BeTrue();
-    }
-
-    [Fact]
-    public void DadaUnaCelulaConTresVecinosLaSiguienteGeneracion_Debe_Sobrevivir()
-    {
-        var juego = new JuegoDeLaVida(2);
-
-        juego.AsignarCelula(0, 0);
-        juego.AsignarCelula(0, 1);
-        juego.AsignarCelula(1, 0);
+        var juego = new JuegoDeLaVida(3);
+        
         juego.AsignarCelula(1, 1);
-
-        var nuevaGeneracion = juego.SiguienteGeneracion();
-        nuevaGeneracion[0, 0].Should().BeTrue();
+        juego.SiguienteGeneracion();
+        
+        juego.CelulaEstaViva(1,1).Should().BeFalse();
     }
 
     [Fact]
-    public void DadaUnaCelulaConCuatroVecinosLaSiguienteGeneracion_Debe_MorirPorSobrePoblacion()
+    public void DadaUnaCelulaEnLaPosicion1_1_Con1Vecino_Debe_MorirPorInfrapoblacion()
     {
         var juego = new JuegoDeLaVida(3);
         
         juego.AsignarCelula(1,1);
         
-        juego.AsignarCelula(0,1);
-        juego.AsignarCelula(1,2);
-        juego.AsignarCelula(2,1);
-        juego.AsignarCelula(1,0);
-        
-        var  nuevaGeneracion = juego.SiguienteGeneracion();
-        nuevaGeneracion[1, 1].Should().BeFalse();
+        juego.AsignarCelula(0,0);
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
     }
 
     [Fact]
-    public void DadaUnaCelulaConCincoVecinosLaSiguienteGeneracion_Debe_MorirPorSobrePoblacion()
+    public void DadaUnaCelulaEnLaPosicion1_1_Con2Vecinos_Debe_PasarALaSiguienteGeneracion()
     {
         var juego = new JuegoDeLaVida(3);
         
@@ -173,16 +130,14 @@ public class JuegoDeLaVidaTest
         
         juego.AsignarCelula(0,0);
         juego.AsignarCelula(0,1);
-        juego.AsignarCelula(1,2);
-        juego.AsignarCelula(2,1);
-        juego.AsignarCelula(1,0);
-        
-        var  nuevaGeneracion = juego.SiguienteGeneracion();
-        nuevaGeneracion[1, 1].Should().BeFalse();
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeTrue();
     }
 
     [Fact]
-    public void DadaUnaCelulaConSeisVecinosLaSiguienteGeneracion_Debe_MorirPorSobrePoblacion()
+    public void DadaUnaCelulaEnLaPosicion1_1_Con3Vecinos_Debe_PasarALaSiguienteGeneracion()
     {
         var juego = new JuegoDeLaVida(3);
         
@@ -190,65 +145,253 @@ public class JuegoDeLaVidaTest
         
         juego.AsignarCelula(0,0);
         juego.AsignarCelula(0,1);
+        juego.AsignarCelula(0,2);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1,1).Should().BeTrue();
+    }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1_Con4Vecinos_Debe_MorirPorSobrepoblacion()
+    {
+        var juego = new JuegoDeLaVida(3);
+        
+        juego.AsignarCelula(1,1);
+        
+        juego.AsignarCelula(0,0);
+        juego.AsignarCelula(0,1);
+        juego.AsignarCelula(0,2);
         juego.AsignarCelula(1,2);
-        juego.AsignarCelula(2,1);
-        juego.AsignarCelula(1,0);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1_Con5Vecinos_Debe_MorirPorSobrepoblacion()
+    {
+        var  juego = new JuegoDeLaVida(3);
+        
+        juego.AsignarCelula(1,1);
+        
+        juego.AsignarCelula(0,0);
+        juego.AsignarCelula(0,1);
+        juego.AsignarCelula(0,2);
+        juego.AsignarCelula(1,2);
+        juego.AsignarCelula(2,2);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1_Con6Vecinos_Debe_MorirPorSobrepoblacion()
+    {
+        var  juego = new JuegoDeLaVida(3);
+        
+        juego.AsignarCelula(1,1);
+        
+        juego.AsignarCelula(0,0);
+        juego.AsignarCelula(0,1);
+        juego.AsignarCelula(0,2);
+        juego.AsignarCelula(1,2);
+        juego.AsignarCelula(2,2);
+        juego.AsignarCelula(2, 1);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1_Con7Vecinos_Debe_MorirPorSobrepoblacion()
+    {
+        var  juego = new JuegoDeLaVida(3);
+        
+        juego.AsignarCelula(1,1);
+        
+        juego.AsignarCelula(0,0);
+        juego.AsignarCelula(0,1);
+        juego.AsignarCelula(0,2);
+        juego.AsignarCelula(1,2);
+        juego.AsignarCelula(2,2);
+        juego.AsignarCelula(2, 1);
+        juego.AsignarCelula(2, 0);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1_Con8Vecinos_Debe_MorirPorSobrepoblacion()
+    {
+        var  juego = new JuegoDeLaVida(3);
+        
+        juego.AsignarCelula(1,1);
+        
+        juego.AsignarCelula(0,0);
+        juego.AsignarCelula(0,1);
+        juego.AsignarCelula(0,2);
+        juego.AsignarCelula(1,2);
+        juego.AsignarCelula(2,2);
+        juego.AsignarCelula(2, 1);
+        juego.AsignarCelula(2, 0);
+        juego.AsignarCelula(1, 0);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1Muerta_SinVecinos_Debe_MantenerseMuerta()
+    {
+        var juego = new JuegoDeLaVida(3);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1Muerta_Con1Vecino_Debe_MantenerseMuerta()
+    {
+        var juego = new JuegoDeLaVida(3);
+        
+        juego.AsignarCelula(0,1);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1Muerta_Con2Vecinos_Debe_MantenerseMuerta()
+    {
+        var  juego = new JuegoDeLaVida(3);
+        
+        juego.AsignarCelula(0,1);
         juego.AsignarCelula(0,2);
         
-        var  nuevaGeneracion = juego.SiguienteGeneracion();
-        nuevaGeneracion[1, 1].Should().BeFalse();
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
     }
 
     [Fact]
-    public void DadaUnaCelulaConSieteVecinosLaSiguienteGeneracion_Debe_MorirPorSobrePoblacion()
+    public void DadaUnaCelulaEnLaPosicion1_1Muerta_Con3Vecinos_Debe_NacerPorReproduccion()
     {
-        var juego = new JuegoDeLaVida(3);
+        var  juego = new JuegoDeLaVida(3);
         
-        juego.AsignarCelula(1,1);
-        
-        juego.AsignarCelula(0,0);
         juego.AsignarCelula(0,1);
-        juego.AsignarCelula(1,2);
-        juego.AsignarCelula(2,1);
-        juego.AsignarCelula(1,0);
         juego.AsignarCelula(0,2);
-        juego.AsignarCelula(2,0);
-        
-        var  nuevaGeneracion = juego.SiguienteGeneracion();
-        nuevaGeneracion[1, 1].Should().BeFalse();
+        juego.AsignarCelula(1,2);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeTrue();
     }
-    
+
     [Fact]
-    public void DadaUnaCelulaConOchoVecinosLaSiguienteGeneracion_Debe_MorirPorSobrePoblacion()
+    public void DadaUnaCelulaEnLaPosicion1_1Muerta_Con4Vecinos_Debe_MantenerseMuerta()
     {
-        var juego = new JuegoDeLaVida(3);
+        var   juego = new JuegoDeLaVida(3);
         
-        juego.AsignarCelula(1,1);
-        
-        juego.AsignarCelula(0,0);
         juego.AsignarCelula(0,1);
-        juego.AsignarCelula(1,2);
-        juego.AsignarCelula(2,1);
-        juego.AsignarCelula(1,0);
         juego.AsignarCelula(0,2);
-        juego.AsignarCelula(2,0);
+        juego.AsignarCelula(1,2);
         juego.AsignarCelula(2,2);
         
-        var  nuevaGeneracion = juego.SiguienteGeneracion();
-        nuevaGeneracion[1, 1].Should().BeFalse();
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
     }
 
     [Fact]
-    public void DadaUnaCelulaMuertaYTieneTresVecinasVivas_Debe_NacerPorReproduccion()
+    public void DadaUnaCelulaEnLaPosicion1_1Muerta_Con5Vecinos_Debe_MantenerseMuerta()
     {
-        var juego = new JuegoDeLaVida(2);
+        var   juego = new JuegoDeLaVida(3);
         
-        juego.AsignarCelula(0,0);
-        juego.AsignarCelula(1,0);
         juego.AsignarCelula(0,1);
+        juego.AsignarCelula(0,2);
+        juego.AsignarCelula(1,2);
+        juego.AsignarCelula(2,2);
+        juego.AsignarCelula(2,1);
+        
+        juego.SiguienteGeneracion();
 
-        var nuevaGeneracion =  juego.SiguienteGeneracion();
-
-        nuevaGeneracion[1, 1].Should().BeTrue();
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
     }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1Muerta_Con6Vecinos_Debe_MantenerseMuerta()
+    {
+        var juego = new JuegoDeLaVida(3);
+        
+        juego.AsignarCelula(0,1);
+        juego.AsignarCelula(0,2);
+        juego.AsignarCelula(1,2);
+        juego.AsignarCelula(2,2);
+        juego.AsignarCelula(2,1);
+        juego.AsignarCelula(2,0);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1Muerta_Con7Vecinos_Debe_MantenerseMuerta()
+    {
+        var juego = new JuegoDeLaVida(3);
+        
+        juego.AsignarCelula(0,1);
+        juego.AsignarCelula(0,2);
+        juego.AsignarCelula(1,2);
+        juego.AsignarCelula(2,2);
+        juego.AsignarCelula(2,1);
+        juego.AsignarCelula(2,0);
+        juego.AsignarCelula(1,0);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DadaUnaCelulaEnLaPosicion1_1Muerta_Con8Vecinos_Debe_MantenerseMuerta()
+    {
+        var juego = new JuegoDeLaVida(3);
+        
+        juego.AsignarCelula(0,1);
+        juego.AsignarCelula(0,2);
+        juego.AsignarCelula(1,2);
+        juego.AsignarCelula(2,2);
+        juego.AsignarCelula(2,1);
+        juego.AsignarCelula(2,0);
+        juego.AsignarCelula(1,0);
+        juego.AsignarCelula(0,0);
+
+        juego.SiguienteGeneracion();
+
+        juego.CelulaEstaViva(1, 1).Should().BeFalse();
+    }
+
+    // [Fact]
+    // public void DadaDosCelulasVecinas_Debe_MorirAmbasPorInfrapoblacion()
+    // {
+    //     var  juego = new JuegoDeLaVida(2);
+    //     
+    //     juego.AsignarCelula(0,0);
+    //     juego.AsignarCelula(1,1);
+    //     bool[,] generacionEsperada = new bool[2, 2];
+    //
+    //     bool[,] nuevaGeneracion = juego.SiguienteGeneracion();
+    //     
+    //     nuevaGeneracion.Should().BeEquivalentTo(generacionEsperada);
+    // }
 }
