@@ -394,4 +394,35 @@ public class JuegoDeLaVidaTest
         
         nuevaGeneracion.Should().BeEquivalentTo(generacionEsperada);
     }
+
+    [Fact]
+    public void DadaLaComposicionRPentominoYEnLaQuintaGeneracion_Debe_TenerLaComposicionEsperada()
+    {
+        var juego = new JuegoDeLaVida(6);
+        juego.AsignarCelula(1, 1);
+        juego.AsignarCelula(1, 2);
+        juego.AsignarCelula(2, 2);
+        juego.AsignarCelula(2, 3);
+        juego.AsignarCelula(3, 2);
+
+        bool[,] generacionEsperada = new  bool[6, 6];
+                
+        generacionEsperada[0,2] = true;
+        generacionEsperada[1,0] = true;
+        generacionEsperada[1,1] = true;
+        generacionEsperada[1,3] = true;
+        generacionEsperada[1,4] = true;
+        generacionEsperada[2,1] = true;
+        generacionEsperada[2,4] = true;
+        generacionEsperada[3,2] = true;
+        generacionEsperada[3,3] = true;
+            
+        juego.SiguienteGeneracion();
+        juego.SiguienteGeneracion();
+        juego.SiguienteGeneracion();
+        juego.SiguienteGeneracion();
+        var quintaGeneracion = juego.SiguienteGeneracion();
+
+        quintaGeneracion.Should().BeEquivalentTo(generacionEsperada);
+    }
 }
